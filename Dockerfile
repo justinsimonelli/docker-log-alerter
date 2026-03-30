@@ -11,8 +11,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application
 COPY alerter/ ./alerter/
 
-# Run as non-root user
-RUN useradd -m alerter
-USER alerter
-
+# Note: Runs as root to access Docker socket (same as Watchtower, Traefik, etc.)
 CMD ["python", "-m", "alerter.main"]
