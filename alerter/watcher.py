@@ -26,9 +26,13 @@ class DockerWatcher:
         container_name = container.name
         print(f"[watcher] Watching container: {container_name}")
 
+        # In debug mode, grab recent logs to sample immediately
+        # Otherwise, only watch new logs
+        tail_count = 10 if self.config.debug_mode else 0
+
         try:
-            # Stream logs (follow=True, since=now)
-            for log_bytes in container.logs(stream=True, follow=True, since=0, tail=0):
+            # Stream logs (follow=True)
+            for log_bytes in container.logs(stream=True, follow=True, tail=tail_count):
                 if self._stop_event.is_set():
                     break
 
