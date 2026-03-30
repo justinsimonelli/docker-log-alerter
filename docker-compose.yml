@@ -1,0 +1,28 @@
+# Example docker-compose for docker-log-alerter
+# Add this to your existing compose file or run standalone
+
+services:
+  log-alerter:
+    build: .
+    # Or use pre-built image:
+    # image: ghcr.io/justinsimonelli/docker-log-alerter:latest
+    container_name: log-alerter
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      # Required
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+
+      # Optional: Only watch specific containers (comma-separated)
+      # - WATCH_CONTAINERS=flask_august,cron_speedtest
+
+      # Optional: Only watch containers with specific labels
+      # - WATCH_LABELS=com.example.monitor=true
+
+      # Optional: Log levels to alert on (default: error,fatal,critical)
+      # - LOG_LEVELS=error,fatal,critical,warning
+
+      # Optional: How long to suppress duplicate errors (default: 3600 = 1 hour)
+      # - CACHE_TTL_SECONDS=3600
+
+    restart: always
